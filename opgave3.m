@@ -1,10 +1,10 @@
-function varargout = projectDSP(varargin)
+function varargout = opgave3(varargin)
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename, ...
                        'gui_Singleton',  gui_Singleton, ...
-                       'gui_OpeningFcn', @projectDSP_OpeningFcn, ...
-                       'gui_OutputFcn',  @projectDSP_OutputFcn, ...
+                       'gui_OpeningFcn', @opgave3_OpeningFcn, ...
+                       'gui_OutputFcn',  @opgave3_OutputFcn, ...
                        'gui_LayoutFcn',  [], ...
                        'gui_Callback',   []);
     if nargin && ischar(varargin{1})
@@ -22,17 +22,17 @@ end
 % ------------------------------
 % Opening window
 % ------------------------------
-function projectDSP_OpeningFcn(hObject, eventdata, handles, varargin)
+function opgave3_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.output = hObject;   % varargin   unrecognized PropertyName/PropertyValue pairs from the
     guidata(hObject, handles);  % Update handles structure
     clear;  % remove all existign variables and data
-    % UIWAIT makes projectDSP wait for user response (see UIRESUME)
+    % UIWAIT makes opgave3 wait for user response (see UIRESUME)
     % uiwait(handles.figure1);
 end
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = projectDSP_OutputFcn(hObject, eventdata, handles)
+function varargout = opgave3_OutputFcn(hObject, eventdata, handles)
     varargout{1} = handles.output;
 end
 
@@ -48,19 +48,13 @@ function update(handles)
     column = str2double(get(handles.edit_column, 'String'));
     columns = size(xls_in,2);
     if 1 <= column && column <= columns
-
+        
         input = xls_in(:,column);
         input = transpose(input);
         input = cat(2,input(1:length(input)-1),flip(input));
-<<<<<<< HEAD
-
-        samples = 100;   % Hz or Sa/s
-        n = 0:1:length(input)-1;
-=======
         
         samples = 100;   % Hz or Sa/s
         x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
->>>>>>> parent of c4aac11... removed input mirroring
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
@@ -68,7 +62,7 @@ function update(handles)
         input_fft = fft(input);
         input_fft = abs(input_fft);
         input_fft = fftshift(input_fft);
-
+        
         % get the window function
         cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.popupmenu,'String'));
@@ -91,10 +85,10 @@ function update(handles)
         %window_fft = abs(window_fft);
         %window_fft = fftshift(window_fft);
         %window_fft = window_fft / max(window_fft);  % amplitude = 1
-
+        
         length(input)
         length(window)
-
+        
         % calculate output
         output_fft = input_fft .* window_fft;
         % inverse FFT
@@ -129,7 +123,7 @@ function update(handles)
         else
             stem(f,output_fft);
             xlabel('f (Hz)');
-        end
+        end 
     end
 end
 
