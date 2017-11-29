@@ -53,8 +53,8 @@ function update(handles)
         input = transpose(input);
         
         samples = 100;   % Hz or Sa/s
-        n = 0:1:length(input)-1
-        x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
+        n = 0:1:length(input)-1;
+        %x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
