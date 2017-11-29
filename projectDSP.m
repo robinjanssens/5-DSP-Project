@@ -48,18 +48,13 @@ function update(handles)
     column = str2double(get(handles.edit_column, 'String'));
     columns = size(xls_in,2);
     if 1 <= column && column <= columns
-        
+
         input = xls_in(:,column);
         input = transpose(input);
         input = cat(2,input(1:length(input)-1),flip(input));
-        
+
         samples = 100;   % Hz or Sa/s
-<<<<<<< HEAD
         n = 0:1:length(input)-1;
-        %x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
-=======
-        x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
->>>>>>> parent of c4aac11... removed input mirroring
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
@@ -67,7 +62,7 @@ function update(handles)
         input_fft = fft(input);
         input_fft = abs(input_fft);
         input_fft = fftshift(input_fft);
-        
+
         % get the window function
         cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.popupmenu,'String'));
@@ -90,10 +85,10 @@ function update(handles)
         %window_fft = abs(window_fft);
         %window_fft = fftshift(window_fft);
         %window_fft = window_fft / max(window_fft);  % amplitude = 1
-        
+
         length(input)
         length(window)
-        
+
         % calculate output
         output_fft = input_fft .* window_fft;
         % inverse FFT
@@ -128,7 +123,7 @@ function update(handles)
         else
             stem(f,output_fft);
             xlabel('f (Hz)');
-        end 
+        end
     end
 end
 
