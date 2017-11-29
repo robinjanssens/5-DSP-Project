@@ -99,7 +99,7 @@ function update(handles)
         axes(handles.plot_input);
         if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
             plot(x,input);
-            xlabel('t (s)');
+            xlabel('n (sample)');
         else
             stem(f,input_fft);
             xlabel('f (Hz)');
@@ -109,7 +109,7 @@ function update(handles)
         axes(handles.plot_function);
         if get(handles.checkbox_window,'Value') == 0 % 0 => time / 1 => frequency
             plot(x,window);
-            xlabel('t (s)');
+            xlabel('n (sample)');
         else
             stem(f,window_fft);
             xlabel('f (Hz)');
@@ -119,7 +119,7 @@ function update(handles)
         axes(handles.plot_output);
         if get(handles.checkbox_output,'Value') == 0 % 0 => time / 1 => frequency
             plot(x,real(output));
-            xlabel('t (s)');
+            xlabel('n (sample)');
         else
             stem(f,output_fft);
             xlabel('f (Hz)');
