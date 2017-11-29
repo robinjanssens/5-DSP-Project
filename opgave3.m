@@ -51,50 +51,46 @@ function update(handles)
         
         input = xls_in(:,column);
         input = transpose(input);
-        input = cat(2,input(1:length(input)-1),flip(input));
         
         samples = 100;   % Hz or Sa/s
         n = 0:1:length(input)-1;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
-
+        
         % input FFT
         input_fft = fft(input);
         input_fft = abs(input_fft);
         input_fft = fftshift(input_fft);
         
         % get the window function
-        cutoff = str2double(get(handles.edit_cutoff,'String'));
+        %cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.popupmenu,'String'));
         popChoice = contents(get(handles.popupmenu,'Value'));
         if (strcmp(popChoice,'Boxcar'))
-            window = rectwin(2*cutoff);
+            window = rectwin(length(input));
         elseif (strcmp(popChoice,'Chebyshev'))
-            window = chebwin(2*cutoff);     % *2 because mirrored
+            window = chebwin(length(input));
         elseif (strcmp(popChoice,'Hamming'))
-            window = hamming(2*cutoff);
+            window = hamming(length(input));
         elseif (strcmp(popChoice,'Hann'))
-            window = hann(2*cutoff);
+            window = hann(length(input));
         end
-        window(length(input)) = 0;
-        window = circshift(window,floor(length(window)/2)-cutoff);
         window = transpose(window);   % window functions gives vertical matrices back
-        % FFT
-        window_fft = window;
-        %window_fft = fft(window);
-        %window_fft = abs(window_fft);
-        %window_fft = fftshift(window_fft);
+        
+        % window FFT
+        window_fft = fft(window);
+        window_fft = abs(window_fft);
+        window_fft = fftshift(window_fft);
         %window_fft = window_fft / max(window_fft);  % amplitude = 1
         
-        length(input)
-        length(window)
-        
         % calculate output
-        output_fft = input_fft .* window_fft;
-        % inverse FFT
-        output = ifft(fftshift(output_fft));
-
-
+        output = input .* window;
+        
+        % output FFT
+        output_fft = fft(output)
+        output_fft = abs(output_fft)
+        output_fft = fftshift(output_fft)
+        
         % plot input
         axes(handles.plot_input);
         if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
