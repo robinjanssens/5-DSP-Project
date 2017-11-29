@@ -23,7 +23,7 @@ end
 % Opening window
 % ------------------------------
 function projectDSP_OpeningFcn(hObject, eventdata, handles, varargin)
-    handles.output = hObject;   % varargin   unrecognized PropertclearyName/PropertyValue pairs from the
+    handles.output = hObject;   % varargin   unrecognized PropertyName/PropertyValue pairs from the
     guidata(hObject, handles);  % Update handles structure
     clear;  % remove all existign variables and data
     % UIWAIT makes projectDSP wait for user response (see UIRESUME)
@@ -51,10 +51,15 @@ function update(handles)
         
         input = xls_in(:,column);
         input = transpose(input);
+        input = cat(2,input(1:length(input)-1),flip(input));
         
         samples = 100;   % Hz or Sa/s
+<<<<<<< HEAD
         n = 0:1:length(input)-1;
         %x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
+=======
+        x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
+>>>>>>> parent of c4aac11... removed input mirroring
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
@@ -98,8 +103,8 @@ function update(handles)
         % plot input
         axes(handles.plot_input);
         if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
-            plot(n,input);
-            xlabel('n (sample)');
+            plot(x,input);
+            xlabel('t (s)');
         else
             stem(f,input_fft);
             xlabel('f (Hz)');
@@ -108,8 +113,8 @@ function update(handles)
         % plot window function
         axes(handles.plot_function);
         if get(handles.checkbox_window,'Value') == 0 % 0 => time / 1 => frequency
-            plot(n,window);
-            xlabel('n (sample)');
+            plot(x,window);
+            xlabel('t (s)');
         else
             stem(f,window_fft);
             xlabel('f (Hz)');
@@ -118,8 +123,8 @@ function update(handles)
         % plot output
         axes(handles.plot_output);
         if get(handles.checkbox_output,'Value') == 0 % 0 => time / 1 => frequency
-            plot(n,real(output));
-            xlabel('n (sample)');
+            plot(x,real(output));
+            xlabel('t (s)');
         else
             stem(f,output_fft);
             xlabel('f (Hz)');
