@@ -52,9 +52,15 @@ function update(handles)
         input = xls_in(:,column);
         input = transpose(input);
         input = cat(2,input(1:length(input)-1),flip(input));
+<<<<<<< HEAD
 
         samples = 100;   % Hz or Sa/s
         n = 0:1:length(input)-1;
+=======
+        
+        samples = 100;   % Hz or Sa/s
+        x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
+>>>>>>> parent of c4aac11... removed input mirroring
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
