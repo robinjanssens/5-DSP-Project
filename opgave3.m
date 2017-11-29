@@ -54,7 +54,7 @@ function update(handles)
         input = cat(2,input(1:length(input)-1),flip(input));
         
         samples = 100;   % Hz or Sa/s
-        x = -(length(input)-1)/2/samples:1/samples:(length(input)-1)/2/samples;
+        n = 0:1:length(input)-1;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
 
@@ -98,7 +98,7 @@ function update(handles)
         % plot input
         axes(handles.plot_input);
         if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
-            plot(x,input);
+            plot(n,input);
             xlabel('n (sample)');
         else
             stem(f,input_fft);
@@ -108,7 +108,7 @@ function update(handles)
         % plot window function
         axes(handles.plot_function);
         if get(handles.checkbox_window,'Value') == 0 % 0 => time / 1 => frequency
-            plot(x,window);
+            plot(n,window);
             xlabel('n (sample)');
         else
             stem(f,window_fft);
@@ -118,7 +118,7 @@ function update(handles)
         % plot output
         axes(handles.plot_output);
         if get(handles.checkbox_output,'Value') == 0 % 0 => time / 1 => frequency
-            plot(x,real(output));
+            plot(n,real(output));
             xlabel('n (sample)');
         else
             stem(f,output_fft);
