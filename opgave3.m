@@ -66,8 +66,8 @@ function update(handles)
         %cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.popupmenu,'String'));
         popChoice = contents(get(handles.popupmenu,'Value'));
-        if (strcmp(popChoice,'Boxcar'))
-            window = rectwin(length(input));
+        if (strcmp(popChoice,'Bartlett'))
+            window = bartlett(length(input));
         elseif (strcmp(popChoice,'Chebyshev'))
             window = chebwin(length(input));
         elseif (strcmp(popChoice,'Hamming'))
