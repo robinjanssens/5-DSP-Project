@@ -49,7 +49,8 @@ function update(handles)
     columns = size(xls_in,2);
     if 1 <= column && column <= columns
         
-        input = xls_in(:,column);
+        input = xls_in(:,column); % select column
+        input = input(12:end);    % remove first 11 rows
         input = transpose(input);
         
         samples = 100;   % Hz or Sa/s
