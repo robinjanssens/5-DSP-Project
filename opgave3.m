@@ -103,7 +103,7 @@ function update(handles)
         end
 
         % plot window function
-        axes(handles.plot_function);
+        axes(handles.plot_window);
         if get(handles.checkbox_window,'Value') == 0 % 0 => time / 1 => frequency
             plot(n,window);
             xlabel('n (sample)');
