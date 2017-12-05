@@ -151,6 +151,9 @@ function menu_window_Callback(hObject, eventdata, handles)
     %if (strcmp(popChoice,'Boxcar')) ...
     update(handles);
 end
+function menu_filter_Callback(hObject, eventdata, handles)
+    update(handles);
+end
 
 % ------------------------------
 % Textbox
@@ -187,6 +190,11 @@ function menu_window_CreateFcn(hObject, eventdata, handles)
         set(hObject,'BackgroundColor','white');
     end
 end
+function menu_filter_CreateFcn(hObject, eventdata, handles)
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
 function edit_output_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
@@ -202,3 +210,4 @@ function edit_column_CreateFcn(hObject, eventdata, handles)
         set(hObject,'BackgroundColor','white');
     end
 end
+
