@@ -51,7 +51,6 @@ function update(handles)
         
         input = xls_in(:,column); % select column
         input = input(12:end);    % remove first 11 rows
-        input = transpose(input);
         
         samples = 100;   % Hz or Sa/s
         n = 0:1:length(input)-1;
@@ -76,7 +75,6 @@ function update(handles)
         elseif (strcmp(popChoice,'Hann'))
             window = hann(length(input));
         end
-        window = transpose(window);   % window functions gives vertical matrices back
         
         % window FFT
         window_fft = fft(window);
