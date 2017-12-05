@@ -66,7 +66,9 @@ function update(handles)
         %cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.popupmenu,'String'));
         popChoice = contents(get(handles.popupmenu,'Value'));
-        if (strcmp(popChoice,'Bartlett'))
+        if (strcmp(popChoice,'No Window'))
+            window = rectwin(length(input));
+        elseif (strcmp(popChoice,'Bartlett'))
             window = bartlett(length(input));
         elseif (strcmp(popChoice,'Chebyshev'))
             window = chebwin(length(input));
@@ -86,9 +88,9 @@ function update(handles)
         output = input .* window;
         
         % output FFT
-        output_fft = fft(output)
-        output_fft = abs(output_fft)
-        output_fft = fftshift(output_fft)
+        output_fft = fft(output);
+        output_fft = abs(output_fft);
+        output_fft = fftshift(output_fft);
         
         % plot input
         axes(handles.plot_input);
