@@ -62,7 +62,9 @@ function update(handles)
         input_fft = abs(input_fft);
         input_fft = fftshift(input_fft);
         
-        % get the window function
+        % ------------------------------
+        % Window Function
+        % ------------------------------
         %cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.menu_window,'String'));
         popChoice = contents(get(handles.menu_window,'Value'));
@@ -86,6 +88,30 @@ function update(handles)
         
         % calculate output
         output = input .* window;
+        
+        % ------------------------------
+        % Filter
+        % ------------------------------
+        contents = cellstr(get(handles.menu_filter,'String'));
+        popChoice = contents(get(handles.menu_filter,'Value'));
+        if (strcmp(popChoice,'No Filter'))
+            %output = output % no filter
+        elseif (strcmp(popChoice,'Moving Average'))
+            output = smooth(output,'moving');
+        elseif (strcmp(popChoice,'Local Regression (1th degree)'))
+            output = smooth(output,'lowess');
+        elseif (strcmp(popChoice,'Local Regression (2de degree)'))
+            output = smooth(output,'loess');
+        elseif (strcmp(popChoice,'Savitzky-Golay Filter'))
+            output = smooth(output,'sgolay');
+        elseif (strcmp(popChoice,'Robust Local Regression (1th degree)'))
+            output = smooth(output,'rlowess');
+        elseif (strcmp(popChoice,'Robust Local Regression (2de degree)'))
+            output = smooth(output,'rloess');
+        end
+        
+        
+
         
         % output FFT
         output_fft = fft(output);
@@ -167,6 +193,12 @@ end
 function edit_column_Callback(hObject, eventdata, handles)
     update(handles);
 end
+function edit_span_Callback(hObject, eventdata, handles)
+    update(handles);
+end
+function edit_degree_Callback(hObject, eventdata, handles)
+    update(handles);
+end
 
 % ------------------------------
 % Checkbox
@@ -210,4 +242,13 @@ function edit_column_CreateFcn(hObject, eventdata, handles)
         set(hObject,'BackgroundColor','white');
     end
 end
-
+function edit_span_CreateFcn(hObject, eventdata, handles)
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+function edit_degree_CreateFcn(hObject, eventdata, handles)
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
