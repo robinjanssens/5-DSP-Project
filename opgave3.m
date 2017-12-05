@@ -64,8 +64,8 @@ function update(handles)
         
         % get the window function
         %cutoff = str2double(get(handles.edit_cutoff,'String'));
-        contents = cellstr(get(handles.popupmenu,'String'));
-        popChoice = contents(get(handles.popupmenu,'Value'));
+        contents = cellstr(get(handles.menu_window,'String'));
+        popChoice = contents(get(handles.menu_window,'Value'));
         if (strcmp(popChoice,'No Window'))
             window = rectwin(length(input));
         elseif (strcmp(popChoice,'Bartlett'))
@@ -143,11 +143,11 @@ function button_save_Callback(hObject, eventdata, handles)
 end
 
 % ------------------------------
-% Popupmenu
+% menu_window
 % ------------------------------
-function popupmenu_Callback(hObject, eventdata, handles)
-    %contents = cellstr(get(handles.popupmenu,'String'));
-    %popChoice = contents(get(handles.popupmenu,'Value'));
+function menu_window_Callback(hObject, eventdata, handles)
+    %contents = cellstr(get(handles.menu_window,'String'));
+    %popChoice = contents(get(handles.menu_window,'Value'));
     %if (strcmp(popChoice,'Boxcar')) ...
     update(handles);
 end
@@ -182,7 +182,7 @@ end
 % ------------------------------
 % Create fucntions
 % ------------------------------
-function popupmenu_CreateFcn(hObject, eventdata, handles)
+function menu_window_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
