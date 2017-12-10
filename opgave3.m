@@ -52,7 +52,7 @@ function update(handles)
         input = xls_in(:,column); % select column
         input = input(12:end);    % remove first 11 rows
 
-        samples = 300             % Hz
+        samples = 300;             % Hz
         n = 0:1:length(input)-1;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
@@ -94,14 +94,28 @@ function update(handles)
         span = str2double(get(handles.edit_span,'String'));     % read span textbox
         span = uint32(span);                                    % make it unsigned integer
         set(handles.edit_span,'string',num2str(span));          % change value in textbox
-        if mod(span,2) == 0                                     % if span is not odd
-            span = span-1;                                      % make it odd
-            set(handles.edit_span,'string',num2str(span));      % change value in textbox
+        
+        contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
+        popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
+        if strcmp(popChoice,'Moving Average') || strcmp(popChoice,'Savitzky-Golay Filter')
+            % in 'Moving Average' mode and 'Savitzky-Golay' mode span needs to be bigger than 1 and an odd number
+            if mod(span,2) == 0                                     % if span is not odd
+                span = span-1;                                      % make it odd
+                set(handles.edit_span,'string',num2str(span));      % change value in textbox
+            end
+            if span < 1                                             % if span is smaller than 1
+                span = 1;                                           % make it 1
+                set(handles.edit_span,'string',num2str(span));      % change value in textbox
+            end
+        elseif strcmp(popChoice,'Local Regression (1th degree)') || strcmp(popChoice,'Local Regression (2de degree)') || strcmp(popChoice,'Robust Local Regression (1th degree)') || strcmp(popChoice,'Robust Local Regression (2de degree)')
+            % in regression modes span needs to be a percentage between 0 and 99
+            if span > 99                                            % if span is bigger than 99
+                span = 99;                                          % make it 99
+                set(handles.edit_span,'string',num2str(span));      % change value in textbox
+            end
         end
-        if span < 1                                             % if span is smaller than 1
-            span = 1;                                           % make it 1
-            set(handles.edit_span,'string',num2str(span));      % change value in textbox
-        end
+        
+        
 
         degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
         degree = uint32(degree);                                % make it unsigned integer
@@ -116,17 +130,17 @@ function update(handles)
         if strcmp(popChoice,'No Filter')
             %output = output % no filter
         elseif strcmp(popChoice,'Moving Average')
-            output = smooth(output,double(span),'moving');              % span in samples
+            output = smooth(output,double(span),'moving');                  % span in samples
         elseif strcmp(popChoice,'Local Regression (1th degree)')
-            output = smooth(output,double(span)/100,'lowess');          % span in percent
+            output = smooth(output,double(span)/100,'lowess');              % span in percent
         elseif strcmp(popChoice,'Local Regression (2de degree)')
-            output = smooth(output,double(span)/100,'loess');           % span in percent
+            output = smooth(output,double(span)/100,'loess');               % span in percent
         elseif strcmp(popChoice,'Savitzky-Golay Filter')
-            output = smooth(output,double(span),'sgolay',degree);       % span in samples
+            output = smooth(output,double(span),'sgolay',double(degree));   % span in samples
         elseif strcmp(popChoice,'Robust Local Regression (1th degree)')
-            output = smooth(output,double(span)/100,'rlowess');         % span in percent
+            output = smooth(output,double(span)/100,'rlowess');             % span in percent
         elseif strcmp(popChoice,'Robust Local Regression (2de degree)')
-            output = smooth(output,double(span)/100,'rloess');          % span in percent
+            output = smooth(output,double(span)/100,'rloess');              % span in percent
         end
 
 
