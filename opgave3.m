@@ -48,24 +48,23 @@ function update(handles)
     column = str2double(get(handles.edit_column, 'String'));
     columns = size(xls_in,2);
     if 1 <= column && column <= columns
-        
+
         input = xls_in(:,column); % select column
         input = input(12:end);    % remove first 11 rows
-        
+
         samples = 100;   % Hz or Sa/s
         n = 0:1:length(input)-1;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
-        
+
         % input FFT
         input_fft = fft(input);
         input_fft = abs(input_fft);
         input_fft = fftshift(input_fft);
-        
+
         % ------------------------------
         % Window Function
         % ------------------------------
-        %cutoff = str2double(get(handles.edit_cutoff,'String'));
         contents = cellstr(get(handles.menu_window,'String'));
         popChoice = contents(get(handles.menu_window,'Value'));
         if (strcmp(popChoice,'No Window'))
@@ -79,45 +78,65 @@ function update(handles)
         elseif (strcmp(popChoice,'Hann'))
             window = hann(length(input));
         end
-        
+
         % window FFT
         window_fft = fft(window);
         window_fft = abs(window_fft);
         window_fft = fftshift(window_fft);
         %window_fft = window_fft / max(window_fft);  % amplitude = 1
-        
+
         % calculate output
         output = input .* window;
-        
+
         % ------------------------------
         % Filter
         % ------------------------------
-        contents = cellstr(get(handles.menu_filter,'String'));
-        popChoice = contents(get(handles.menu_filter,'Value'));
+        span = str2double(get(handles.edit_span,'String'));     % read span textbox
+        span = uint32(span);                                    % make it unsigned integer
+        set(handles.edit_span,'string',num2str(span));          % change value in textbox
+        if mod(span,2) == 0                                     % if span is not odd
+            span = span-1;                                      % make it odd
+            set(handles.edit_span,'string',num2str(span));      % change value in textbox
+        end
+        if span < 1                                             % if span is smaller than 1
+            span = 1;                                           % make it 1
+            set(handles.edit_span,'string',num2str(span));      % change value in textbox
+        end
+
+        degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
+        degree = uint32(degree);                                % make it unsigned integer
+        set(handles.edit_degree,'string',num2str(degree));      % change value in textbox
+        if degree > span-1                                      % if degree is larger than span-1
+            degree = span-1;                                    % make it span-1
+            set(handles.edit_degree,'string',num2str(degree));  % change value in textbox
+        end
+
+        contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
+        popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
         if (strcmp(popChoice,'No Filter'))
             %output = output % no filter
         elseif (strcmp(popChoice,'Moving Average'))
-            output = smooth(output,'moving');
+            output = smooth(output,double(span),'moving');
         elseif (strcmp(popChoice,'Local Regression (1th degree)'))
-            output = smooth(output,'lowess');
+            output = smooth(output,double(span),'lowess');
         elseif (strcmp(popChoice,'Local Regression (2de degree)'))
-            output = smooth(output,'loess');
+            output = smooth(output,double(span),'loess');
         elseif (strcmp(popChoice,'Savitzky-Golay Filter'))
-            output = smooth(output,'sgolay');
+            output = smooth(output,double(span),'sgolay',degree);
         elseif (strcmp(popChoice,'Robust Local Regression (1th degree)'))
-            output = smooth(output,'rlowess');
+            output = smooth(output,double(span),'rlowess');
         elseif (strcmp(popChoice,'Robust Local Regression (2de degree)'))
-            output = smooth(output,'rloess');
+            output = smooth(output,double(span),'rloess');
         end
-        
-        
 
-        
+
+
+
         % output FFT
         output_fft = fft(output);
         output_fft = abs(output_fft);
         output_fft = fftshift(output_fft);
-        
+
         % plot input
         axes(handles.plot_input);
         if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
@@ -146,7 +165,7 @@ function update(handles)
         else
             stem(f,output_fft);
             xlabel('f (Hz)');
-        end 
+        end
     end
 end
 
@@ -172,12 +191,62 @@ end
 % menu_window
 % ------------------------------
 function menu_window_Callback(hObject, eventdata, handles)
-    %contents = cellstr(get(handles.menu_window,'String'));
-    %popChoice = contents(get(handles.menu_window,'Value'));
-    %if (strcmp(popChoice,'Boxcar')) ...
     update(handles);
 end
 function menu_filter_Callback(hObject, eventdata, handles)
+    % enable and disable the right tweakable parameters
+    contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
+    popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
+    if (strcmp(popChoice,'No Filter'))
+        set(handles.text_span,'visible','off');
+        set(handles.edit_span,'visible','off');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','off');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif (strcmp(popChoice,'Moving Average'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','on');
+        set(handles.text_percent,'visible','off');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif (strcmp(popChoice,'Local Regression (1th degree)'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','on');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif (strcmp(popChoice,'Local Regression (2de degree)'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','on');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif (strcmp(popChoice,'Savitzky-Golay Filter'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','on');
+        set(handles.text_percent,'visible','off');
+        set(handles.text_degree,'visible','on');
+        set(handles.edit_degree,'visible','on');
+    elseif (strcmp(popChoice,'Robust Local Regression (1th degree)'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','on');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif (strcmp(popChoice,'Robust Local Regression (2de degree)'))
+        set(handles.text_span,'visible','on');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','on');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    end
     update(handles);
 end
 
@@ -185,9 +254,6 @@ end
 % Textbox
 % ------------------------------
 function edit_low_Callback(hObject, eventdata, handles)
-    update(handles);
-end
-function edit_cutoff_Callback(hObject, eventdata, handles)
     update(handles);
 end
 function edit_column_Callback(hObject, eventdata, handles)
@@ -228,11 +294,6 @@ function menu_filter_CreateFcn(hObject, eventdata, handles)
     end
 end
 function edit_output_CreateFcn(hObject, eventdata, handles)
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
-end
-function edit_cutoff_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
