@@ -52,7 +52,7 @@ function update(handles)
         input = xls_in(:,column); % select column
         input = input(12:end);    % remove first 11 rows
 
-        samples = 100;   % Hz or Sa/s
+        samples = 300             % Hz
         n = 0:1:length(input)-1;
         w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
         f = 2*pi*w;
@@ -67,15 +67,15 @@ function update(handles)
         % ------------------------------
         contents = cellstr(get(handles.menu_window,'String'));
         popChoice = contents(get(handles.menu_window,'Value'));
-        if (strcmp(popChoice,'No Window'))
+        if strcmp(popChoice,'No Window')
             window = rectwin(length(input));
-        elseif (strcmp(popChoice,'Bartlett'))
+        elseif strcmp(popChoice,'Bartlett')
             window = bartlett(length(input));
-        elseif (strcmp(popChoice,'Chebyshev'))
+        elseif strcmp(popChoice,'Chebyshev')
             window = chebwin(length(input));
-        elseif (strcmp(popChoice,'Hamming'))
+        elseif strcmp(popChoice,'Hamming')
             window = hamming(length(input));
-        elseif (strcmp(popChoice,'Hann'))
+        elseif strcmp(popChoice,'Hann')
             window = hann(length(input));
         end
 
@@ -113,20 +113,20 @@ function update(handles)
 
         contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
         popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
-        if (strcmp(popChoice,'No Filter'))
+        if strcmp(popChoice,'No Filter')
             %output = output % no filter
-        elseif (strcmp(popChoice,'Moving Average'))
-            output = smooth(output,double(span),'moving');
-        elseif (strcmp(popChoice,'Local Regression (1th degree)'))
-            output = smooth(output,double(span),'lowess');
-        elseif (strcmp(popChoice,'Local Regression (2de degree)'))
-            output = smooth(output,double(span),'loess');
-        elseif (strcmp(popChoice,'Savitzky-Golay Filter'))
-            output = smooth(output,double(span),'sgolay',degree);
-        elseif (strcmp(popChoice,'Robust Local Regression (1th degree)'))
-            output = smooth(output,double(span),'rlowess');
-        elseif (strcmp(popChoice,'Robust Local Regression (2de degree)'))
-            output = smooth(output,double(span),'rloess');
+        elseif strcmp(popChoice,'Moving Average')
+            output = smooth(output,double(span),'moving');              % span in samples
+        elseif strcmp(popChoice,'Local Regression (1th degree)')
+            output = smooth(output,double(span)/100,'lowess');          % span in percent
+        elseif strcmp(popChoice,'Local Regression (2de degree)')
+            output = smooth(output,double(span)/100,'loess');           % span in percent
+        elseif strcmp(popChoice,'Savitzky-Golay Filter')
+            output = smooth(output,double(span),'sgolay',degree);       % span in samples
+        elseif strcmp(popChoice,'Robust Local Regression (1th degree)')
+            output = smooth(output,double(span)/100,'rlowess');         % span in percent
+        elseif strcmp(popChoice,'Robust Local Regression (2de degree)')
+            output = smooth(output,double(span)/100,'rloess');          % span in percent
         end
 
 
@@ -197,49 +197,49 @@ function menu_filter_Callback(hObject, eventdata, handles)
     % enable and disable the right tweakable parameters
     contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
     popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
-    if (strcmp(popChoice,'No Filter'))
+    if strcmp(popChoice,'No Filter')
         set(handles.text_span,'visible','off');
         set(handles.edit_span,'visible','off');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif (strcmp(popChoice,'Moving Average'))
+    elseif strcmp(popChoice,'Moving Average')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','on');
         set(handles.text_percent,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif (strcmp(popChoice,'Local Regression (1th degree)'))
+    elseif strcmp(popChoice,'Local Regression (1th degree)')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif (strcmp(popChoice,'Local Regression (2de degree)'))
+    elseif strcmp(popChoice,'Local Regression (2de degree)')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif (strcmp(popChoice,'Savitzky-Golay Filter'))
+    elseif strcmp(popChoice,'Savitzky-Golay Filter')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','on');
         set(handles.text_percent,'visible','off');
         set(handles.text_degree,'visible','on');
         set(handles.edit_degree,'visible','on');
-    elseif (strcmp(popChoice,'Robust Local Regression (1th degree)'))
+    elseif strcmp(popChoice,'Robust Local Regression (1th degree)')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif (strcmp(popChoice,'Robust Local Regression (2de degree)'))
+    elseif strcmp(popChoice,'Robust Local Regression (2de degree)')
         set(handles.text_span,'visible','on');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
