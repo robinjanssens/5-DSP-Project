@@ -127,20 +127,20 @@ function update(handles)
 
         contents = cellstr(get(handles.menu_filter,'String'));  % get popchoice content
         popChoice = contents(get(handles.menu_filter,'Value')); % get popchoice value
-        if strcmp(popChoice,'No Filter')
-            %output = output % no filter
-        elseif strcmp(popChoice,'Moving Average')
-            output = smooth(output,double(span),'moving');                  % span in samples
-        elseif strcmp(popChoice,'Local Regression (1th degree)')
-            output = smooth(output,double(span)/100,'lowess');              % span in percent
-        elseif strcmp(popChoice,'Local Regression (2de degree)')
-            output = smooth(output,double(span)/100,'loess');               % span in percent
-        elseif strcmp(popChoice,'Savitzky-Golay Filter')
-            output = smooth(output,double(span),'sgolay',double(degree));   % span in samples
-        elseif strcmp(popChoice,'Robust Local Regression (1th degree)')
-            output = smooth(output,double(span)/100,'rlowess');             % span in percent
-        elseif strcmp(popChoice,'Robust Local Regression (2de degree)')
-            output = smooth(output,double(span)/100,'rloess');              % span in percent
+        if strcmp(popChoice,'No Filter')                                    % if no filter is selected
+                                                                            % output = output (do nothing)
+        elseif strcmp(popChoice,'Moving Average')                           % if filter 'Moving Average' is selected
+            output = smooth(output,double(span),'moving');                  % perform smooth() on output (span in samples)
+        elseif strcmp(popChoice,'Local Regression (1th degree)')            % if filter 'Local Regression (1th degree)' is selected
+            output = smooth(output,double(span)/100,'lowess');              % perform smooth() on output (span in percentage)
+        elseif strcmp(popChoice,'Local Regression (2de degree)')            % if filter 'Local Regression (2de degree)' is selected
+            output = smooth(output,double(span)/100,'loess');               % perform smooth() on output (span in percentage)
+        elseif strcmp(popChoice,'Savitzky-Golay Filter')                    % if filter Savitzky-Golay Filter' is selected
+            output = smooth(output,double(span),'sgolay',double(degree));   % perform smooth() on output (span in samples)
+        elseif strcmp(popChoice,'Robust Local Regression (1th degree)')     % if filter 'Robust Local Regression (1th degree)' is selected
+            output = smooth(output,double(span)/100,'rlowess');             % perform smooth() on output (span in percentage)
+        elseif strcmp(popChoice,'Robust Local Regression (2de degree)')     % if filter 'Robust Local Regression (2de degree)' is selected
+            output = smooth(output,double(span)/100,'rloess');              % perform smooth() on output (span in percentage)
         end
 
 
