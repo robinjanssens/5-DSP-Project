@@ -198,7 +198,7 @@ function button_save_Callback(hObject, eventdata, handles)
     global output;                                              % make output variable accesable
     [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select output file
     filename = strcat(PathName,FileName);                       % get complete path
-    status = xlswrite(filename,[zeros(15,1);output]);           % try to write xls file
+    status = xlswrite(filename,[zeros(11,1);output]);           % try to write xls file
     if status                                                   % if saving is succesful 
         msgbox('File saved succesfully', 'File Saved');         % show dialog
     else                                                        % if saving is not succesful
