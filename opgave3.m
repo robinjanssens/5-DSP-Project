@@ -191,14 +191,21 @@ function button_select_input_Callback(hObject, eventdata, handles)
     global xls_in;
     [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file');
     filename = strcat(PathName,FileName);
-    % input = uiimport(filename);
     xls_in = xlsread(filename);
     update(handles);
 end
 function button_save_Callback(hObject, eventdata, handles)
-    global output;
-    outputFile = get(handles.edit_output, 'String');
-    csvwrite(outputFile,output);
+    global output;                                              % make output variable accesable
+    [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select output file
+    filename = strcat(PathName,FileName);                       % get complete path
+    status = xlswrite(filename,[zeros(15,1);output]);           % try to write xls file
+    if status                                                   % if saving is succesful 
+        msgbox('File saved succesfully', 'File Saved');         % show dialog
+    else                                                        % if saving is not succesful
+        msgbox('Failed to save File', 'Saving failed','error'); % show error dialog
+    end
+    %outputFile = get(handles.edit_output, 'String');
+    %csvwrite(outputFile,output);
 end
 
 % ------------------------------
