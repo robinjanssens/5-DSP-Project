@@ -187,18 +187,19 @@ end
 % ------------------------------
 % Buttons
 % ------------------------------
-function button_select_input_Callback(hObject, eventdata, handles)
-    global xls_in;
-    [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file');
-    filename = strcat(PathName,FileName);
-    xls_in = xlsread(filename);
-    update(handles);
+function button_open_Callback(hObject, eventdata, handles)
+    global xls_in;                                              % make 'xls_in' variable accesable
+    [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select input file
+    filename = strcat(PathName,FileName);                       % get complete path
+    xls_in = xlsread(filename);                                 % read file to 'xls_in'
+    update(handles);                                            % run calculation and plot
 end
 function button_save_Callback(hObject, eventdata, handles)
-    global output;                                              % make output variable accesable
+    global output;                                              % make 'output' variable accesable
+    xls_out = [zeros(11,1);output]                              % create offset
     [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select output file
     filename = strcat(PathName,FileName);                       % get complete path
-    status = xlswrite(filename,[zeros(11,1);output]);           % try to write xls file
+    status = xlswrite(filename,xls_out);           % try to write xls file
     if status                                                   % if saving is succesful 
         msgbox('File saved succesfully', 'File Saved');         % show dialog
     else                                                        % if saving is not succesful
@@ -310,11 +311,6 @@ function menu_window_CreateFcn(hObject, eventdata, handles)
     end
 end
 function menu_filter_CreateFcn(hObject, eventdata, handles)
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
-end
-function edit_output_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
