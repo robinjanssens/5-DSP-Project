@@ -55,9 +55,10 @@ function update(handles)
         f = fs*(0:(length(input)/2))/length(input); % generate frequency x-axis values
 
         % input FFT
-        input_fft = fft(input);
-        input_fft = abs(input_fft);
-        input_fft = fftshift(input_fft);
+        input_fft = fft(input);                         % calculate fft from the input data
+        input_fft = abs(input_fft);                     % take the absolute value of the vector to eliminate phase
+        input_fft = input_fft/fs;                       % devide by sampling frequency to get the right amplitudes
+        input_fft = input_fft(1:length(input)/2+1);    % only take upper band
 
         % ------------------------------
         % Window Function
@@ -77,10 +78,10 @@ function update(handles)
         end
 
         % window FFT
-        window_fft = fft(window);           % calculate fft
-        window_fft = abs(window_fft);       % get absolute values
-        window_fft = fftshift(window_fft);  % shift upper and lower frequency band
-        %window_fft = window_fft / max(window_fft);  % amplitude = 1
+        window_fft = fft(window);                         % calculate fft from the window data
+        window_fft = abs(window_fft);                     % take the absolute value of the vector to eliminate phase
+        window_fft = window_fft/fs;                       % devide by sampling frequency to get the right amplitudes
+        window_fft = window_fft(1:length(input)/2+1);    % only take upper band
 
         % calculate output
         output = input .* window;
@@ -142,9 +143,10 @@ function update(handles)
 
 
         % output FFT
-        output_fft = fft(output);
-        output_fft = abs(output_fft);
-        output_fft = fftshift(output_fft);
+        output_fft = fft(output);                         % calculate fft from the output data
+        output_fft = abs(output_fft);                     % take the absolute value of the vector to eliminate phase
+        output_fft = output_fft/fs;                       % devide by sampling frequency to get the right amplitudes
+        output_fft = output_fft(1:length(input)/2+1);    % only take upper band
 
         % plot input
         axes(handles.plot_input);
