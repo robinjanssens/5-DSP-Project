@@ -50,12 +50,9 @@ function update(handles)
     if 1 <= column && column <= columns
 
         input = xls_in(:,column); % select column
-        input = input(12:end);    % remove first 11 rows
 
-        disp(fs)
-        n = 0:1:length(input)-1;
-        w = (-(length(input)-1)/2:(length(input)-1)/2)*fs/length(input);
-        f = 2*pi*w;
+        n = 0:1:length(input)-1;                    % generate sample x-axis values
+        f = fs*(0:(length(input)/2))/length(input); % generate frequency x-axis values
 
         % input FFT
         input_fft = fft(input);
@@ -190,8 +187,8 @@ function button_open_Callback(hObject, eventdata, handles)
     global fs;                                                  % make 'fs' variable accesable
     [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select input file
     filename = strcat(PathName,FileName);                       % get complete path
-    xls_in = xlsread(filename);                                 % read data to 'xls_in'
-    fs = xlsread(filename,'A9:A9');                                     % read sample frequency to 'fs'
+    xls_in = xlsread(filename,'A12:G2011');                     % read data to 'xls_in' for a maximum of 2000 values
+    fs = xlsread(filename,'A9:A9');                             % read sample frequency to 'fs'
     update(handles);                                            % run calculation and plot
 end
 function button_save_Callback(hObject, eventdata, handles)
