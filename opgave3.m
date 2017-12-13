@@ -43,6 +43,7 @@ end
 function update(handles)
     global xls_in;          % make 'xls_in' variable accesable
     global output;          % make 'output' variable accesable
+    global fs;              % make 'fs' variable accesable
 
     column = str2double(get(handles.edit_column, 'String'));
     columns = size(xls_in,2);
@@ -51,9 +52,9 @@ function update(handles)
         input = xls_in(:,column); % select column
         input = input(12:end);    % remove first 11 rows
 
-        samples = 300;             % Hz
+        disp(fs)
         n = 0:1:length(input)-1;
-        w = (-(length(input)-1)/2:(length(input)-1)/2)*samples/length(input);
+        w = (-(length(input)-1)/2:(length(input)-1)/2)*fs/length(input);
         f = 2*pi*w;
 
         % input FFT
@@ -186,23 +187,31 @@ end
 % ------------------------------
 function button_open_Callback(hObject, eventdata, handles)
     global xls_in;                                              % make 'xls_in' variable accesable
-    [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select input file
+    global fs;                                                  % make 'fs' variable accesable
+    [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select input file
     filename = strcat(PathName,FileName);                       % get complete path
-    xls_in = xlsread(filename);                                 % read file to 'xls_in'
+    xls_in = xlsread(filename);                                 % read data to 'xls_in'
+    fs = xlsread(filename,'A9:A9');                                     % read sample frequency to 'fs'
     update(handles);                                            % run calculation and plot
 end
 function button_save_Callback(hObject, eventdata, handles)
     global output;                                              % make 'output' variable accesable
-    [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel code file'); % ask user to select output file
+    global fs;                                                  % make 'fs' variable accesable
+    [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select output file
     filename = strcat(PathName,FileName);                       % get complete path
-    status = xlswrite(filename,output,'Blad1','A12');           % try to write xls file
+    status = xlswrite(filename,output,'Blad1','A12');           % try to write output to xls file
+    if status                                                   % if saving output is succesful
+        status = xlswrite(filename,fs,'Blad1','A9');            % try to write sample frequency to xls file
+        if status                                               % if saving sample frequency is succesful
+            status = xlswrite(filename,'HZ','Blad1','B9');      % try to write sample frequency unit to xls file
+        end
+    end
+    % message box with feedback
     if status                                                   % if saving is succesful
         msgbox('File saved succesfully', 'File Saved');         % show dialog
     else                                                        % if saving is not succesful
         msgbox('Failed to save File', 'Saving failed','error'); % show error dialog
     end
-    %outputFile = get(handles.edit_output, 'String');
-    %csvwrite(outputFile,output);
 end
 
 % ------------------------------
