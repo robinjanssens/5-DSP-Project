@@ -73,7 +73,8 @@ function update(handles)
     input_fft = fft(input);                                 % calculate fft from the input data
     input_fft = abs(input_fft);                             % take the absolute value of the vector to eliminate phase
     input_fft = input_fft/fs;                               % devide by sampling frequency to get the right amplitudes
-    input_fft = input_fft(1:floor(length(input)/2+1));      % only take upper band
+    input_fft = input_fft(1:floor(length(input)/2+1));      % only take upperband
+    input_fft(1) = input_fft(1)/2;                          % correct DC component (doubled because of overlap of upper- and lowerband)
 
     % ------------------------------
     % Window Function
@@ -96,7 +97,8 @@ function update(handles)
     window_fft = fft(window);                               % calculate fft from the window data
     window_fft = abs(window_fft);                           % take the absolute value of the vector to eliminate phase
     window_fft = window_fft/fs;                             % devide by sampling frequency to get the right amplitudes
-    window_fft = window_fft(1:floor(length(input)/2+1));    % only take upper band
+    window_fft = window_fft(1:floor(length(input)/2+1));    % only take upperband
+    window_fft(1) = window_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
 
 
     % calculate output
@@ -162,7 +164,8 @@ function update(handles)
     output_fft = fft(output);                               % calculate fft from the output data
     output_fft = abs(output_fft);                           % take the absolute value of the vector to eliminate phase
     output_fft = output_fft/fs;                             % devide by sampling frequency to get the right amplitudes
-    output_fft = output_fft(1:floor(length(input)/2+1));    % only take upper band
+    output_fft = output_fft(1:floor(length(input)/2+1));    % only take upperband
+    output_fft(1) = output_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
 
     % plot input
     axes(handles.plot_input);
