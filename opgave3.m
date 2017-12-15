@@ -169,7 +169,7 @@ function update(handles)
 
     % plot input
     axes(handles.plot_input);
-    if get(handles.checkbox_input,'Value') == 0 % 0 => time / 1 => frequency
+    if get(handles.checkbox_input,'Value') == 0 % 0 means time and 1 means frequency
         plot(n,input);
         xlabel('n (sample)');
     else
@@ -179,7 +179,7 @@ function update(handles)
 
     % plot window function
     axes(handles.plot_window);
-    if get(handles.checkbox_window,'Value') == 0 % 0 => time / 1 => frequency
+    if get(handles.checkbox_window,'Value') == 0 % 0 means time and 1 means frequency
         plot(n,window);
         xlabel('n (sample)');
     else
@@ -189,7 +189,7 @@ function update(handles)
 
     % plot output
     axes(handles.plot_output);
-    if get(handles.checkbox_output,'Value') == 0 % 0 => time / 1 => frequency
+    if get(handles.checkbox_output,'Value') == 0 % 0 means time and 1 means frequency
         plot(n,real(output));
         xlabel('n (sample)');
     else
@@ -203,13 +203,15 @@ end
 % Buttons
 % ------------------------------
 function button_open_Callback(hObject, eventdata, handles)
-    global xls_in;                                              % make 'xls_in' variable accesable
-    global fs;                                                  % make 'fs' variable accesable
-    [FileName,PathName] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select input file
-    filename = strcat(PathName,FileName);                       % get complete path
-    xls_in = xlsread(filename,'A12:G2011');                     % read data to 'xls_in' for a maximum of 2000 values
-    fs = xlsread(filename,'A9:A9');                             % read sample frequency to 'fs'
-    update(handles);                                            % run calculation and plot
+    global xls_in;                                  % make 'xls_in' variable accesable
+    global fs;                                      % make 'fs' variable accesable
+    [filename,pathname] = uigetfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select input file
+    if not(isequal(filename,0))                     % if file is choosen (and not canceled)
+        filename = strcat(pathname,filename);       % get complete path
+        xls_in = xlsread(filename,'A12:G2011');     % read data to 'xls_in' for a maximum of 2000 values
+        fs = xlsread(filename,'A9:A9');             % read sample frequency to 'fs'
+        update(handles);                            % run calculation and plot
+    end
 end
 function button_save_Callback(hObject, eventdata, handles)
     global output;              % make 'output' variable accesable
@@ -219,30 +221,32 @@ function button_save_Callback(hObject, eventdata, handles)
     global span;                % make 'span' variable accesable
     global degree;              % make 'degree' variable accesable
     % select file
-    [FileName,PathName] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select output file
-    filename = strcat(PathName,FileName);                                   % get complete path
-    % try to write everything
-    status = xlswrite(filename,output,'Blad1','A12');                       % try to write output to xls file and write status response to status vector
-    status = [status xlswrite(filename,fs,'Blad1','A9')];                   % try to write sample frequency to xls file and write status response to status vector
-    status = [status xlswrite(filename,{'HZ'},'Blad1','B9')];               % try to write sample frequency unit to xls file and write status response to status vector
-    status = [status xlswrite(filename,{'Window'},'Blad1','B6')];           % try to write 'Window' to xls file and write status response to status vector
-    status = [status xlswrite(filename,selected_window,'Blad1','C6')];      % try to write selected_window to xls file and write status response to status vector
-    status = [status xlswrite(filename,{'Filter'},'Blad1','B7')];           % try to write 'Filter' to xls file and write status response to status vector
-    status = [status xlswrite(filename,selected_filter,'Blad1','C7')];      % try to write selected_filter to xls file and write status response to status vector
-    if not(strcmp(selected_filter,'No Filter'))                             % unless 'No Filter' is selected
-        status = [status xlswrite(filename,{'Span'},'Blad1','D7')];         % try to write 'Span' to xls file and write status response to status vector
-        status = [status xlswrite(filename,span,'Blad1','E7')];                 % try to write span value to xls file and write status response to status vector
-        if strcmp(selected_filter,'Savitzky-Golay Filter')                  % if 'Savitzky-Golay Filter' is selected
-            status = [status xlswrite(filename,{'Degree'},'Blad1','F7')];   % try to write 'Degree' to xls file and write status response to status vector
-            status = [status xlswrite(filename,degree,'Blad1','G7')];       % try to write degree value to xls file and write status response to status vector
+    [filename,pathname] = uiputfile('*.xlsx','Excel-files (*.xlsx)','Select the Excel file'); % ask user to select output file
+    if not(isequal(filename,0))                                                 % if file is choosen (and not canceled)
+        filename = strcat(pathname,filename);                                   % get complete path
+        % try to write everything
+        status = xlswrite(filename,output,'Blad1','A12');                       % try to write output to xls file and write status response to status vector
+        status = [status xlswrite(filename,fs,'Blad1','A9')];                   % try to write sample frequency to xls file and write status response to status vector
+        status = [status xlswrite(filename,{'HZ'},'Blad1','B9')];               % try to write sample frequency unit to xls file and write status response to status vector
+        status = [status xlswrite(filename,{'Window'},'Blad1','B6')];           % try to write 'Window' to xls file and write status response to status vector
+        status = [status xlswrite(filename,selected_window,'Blad1','C6')];      % try to write selected_window to xls file and write status response to status vector
+        status = [status xlswrite(filename,{'Filter'},'Blad1','B7')];           % try to write 'Filter' to xls file and write status response to status vector
+        status = [status xlswrite(filename,selected_filter,'Blad1','C7')];      % try to write selected_filter to xls file and write status response to status vector
+        if not(strcmp(selected_filter,'No Filter'))                             % unless 'No Filter' is selected
+            status = [status xlswrite(filename,{'Span'},'Blad1','D7')];         % try to write 'Span' to xls file and write status response to status vector
+            status = [status xlswrite(filename,span,'Blad1','E7')];             % try to write span value to xls file and write status response to status vector
+            if strcmp(selected_filter,'Savitzky-Golay Filter')                  % if 'Savitzky-Golay Filter' is selected
+                status = [status xlswrite(filename,{'Degree'},'Blad1','F7')];   % try to write 'Degree' to xls file and write status response to status vector
+                status = [status xlswrite(filename,degree,'Blad1','G7')];       % try to write degree value to xls file and write status response to status vector
+            end
         end
-    end
-    status = prod(status);                                                  % take the product of all statuses (one '0' wil make the result '0')
-    % message box with feedback
-    if status                                                   % if saving is succesful
-        msgbox('File saved succesfully', 'File Saved');         % show dialog
-    else                                                        % if saving is not succesful
-        msgbox('Failed to save File', 'Saving failed','error'); % show error dialog
+        status = prod(status);                                                  % take the product of all statuses (one '0' wil make the result '0')
+        % message box with feedback
+        if status                                                   % if saving is succesful
+            msgbox('File saved succesfully', 'File Saved');         % show dialog
+        else                                                        % if saving is not succesful
+            msgbox('Failed to save File', 'Saving failed','error'); % show error dialog
+        end
     end
 end
 
