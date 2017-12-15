@@ -69,13 +69,6 @@ function update(handles)
     n = 0:1:length(input)-1;                      % generate sample x-axis values
     f = fs*(0:(length(input)/2))/length(input);   % generate frequency x-axis values
 
-    % input FFT
-    input_fft = fft(input);                                 % calculate fft from the input data
-    input_fft = abs(input_fft);                             % take the absolute value of the vector to eliminate phase
-    input_fft = input_fft/fs;                               % devide by sampling frequency to get the right amplitudes
-    input_fft = input_fft(1:floor(length(input)/2+1));      % only take upperband
-    input_fft(1) = input_fft(1)/2;                          % correct DC component (doubled because of overlap of upper- and lowerband)
-
     % ------------------------------
     % Window Function
     % ------------------------------
@@ -93,16 +86,9 @@ function update(handles)
         window = hann(length(input));
     end
 
-    % window FFT
-    window_fft = fft(window);                               % calculate fft from the window data
-    window_fft = abs(window_fft);                           % take the absolute value of the vector to eliminate phase
-    window_fft = window_fft/fs;                             % devide by sampling frequency to get the right amplitudes
-    window_fft = window_fft(1:floor(length(input)/2+1));    % only take upperband
-    window_fft(1) = window_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
 
+    output = input .* window;       % calculate output using window function
 
-    % calculate output
-    output = input .* window;
 
     % ------------------------------
     % Filter
@@ -131,8 +117,6 @@ function update(handles)
         end
     end
 
-
-
     degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
     degree = uint32(degree);                                % make it unsigned integer to remove negative numbers and decimal numbers
     set(handles.edit_degree,'string',num2str(degree));      % change value in textbox
@@ -142,7 +126,7 @@ function update(handles)
     end
 
     if strcmp(selected_filter,'No Filter')                                    % if no filter is selected
-                                                                        % output = output (do nothing)
+        % output = output (do nothing)
     elseif strcmp(selected_filter,'Moving Average')                           % if filter 'Moving Average' is selected
         output = smooth(output,double(span),'moving');                  % perform smooth() on output (span in samples)
     elseif strcmp(selected_filter,'Local Regression (1th degree)')            % if filter 'Local Regression (1th degree)' is selected
@@ -158,15 +142,6 @@ function update(handles)
     end
 
 
-
-
-    % output FFT
-    output_fft = fft(output);                               % calculate fft from the output data
-    output_fft = abs(output_fft);                           % take the absolute value of the vector to eliminate phase
-    output_fft = output_fft/fs;                             % devide by sampling frequency to get the right amplitudes
-    output_fft = output_fft(1:floor(length(input)/2+1));    % only take upperband
-    output_fft(1) = output_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
-
     % ------------------------------
     % Plotting
     % ------------------------------
@@ -176,6 +151,11 @@ function update(handles)
         plot(n,input);                              % plot 'input' data
         xlabel('n (sample)');                       % set x-axis label
     else
+        input_fft = fft(input);                                 % calculate fft from the input data
+        input_fft = abs(input_fft);                             % take the absolute value of the vector to eliminate phase
+        input_fft = input_fft/fs;                               % devide by sampling frequency to get the right amplitudes
+        input_fft = input_fft(1:floor(length(input)/2+1));      % only take upperband
+        input_fft(1) = input_fft(1)/2;                          % correct DC component (doubled because of overlap of upper- and lowerband)
         stem(f,input_fft);                          % plot fft from 'input' data
         xlabel('f (Hz)');                           % set x-axis label
     end
@@ -186,6 +166,11 @@ function update(handles)
         plot(n,window);                             % plot window function
         xlabel('n (sample)');                       % set x-axis label
     else
+        window_fft = fft(window);                               % calculate fft from the window data
+        window_fft = abs(window_fft);                           % take the absolute value of the vector to eliminate phase
+        window_fft = window_fft/fs;                             % devide by sampling frequency to get the right amplitudes
+        window_fft = window_fft(1:floor(length(input)/2+1));    % only take upperband
+        window_fft(1) = window_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
         stem(f,window_fft);                         % plot fft from window function
         xlabel('f (Hz)');                           % set x-axis label
     end
@@ -196,6 +181,11 @@ function update(handles)
         plot(n,real(output));                       % plot 'output' data
         xlabel('n (sample)');                       % set x-axis label
     else
+        output_fft = fft(output);                               % calculate fft from the output data
+        output_fft = abs(output_fft);                           % take the absolute value of the vector to eliminate phase
+        output_fft = output_fft/fs;                             % devide by sampling frequency to get the right amplitudes
+        output_fft = output_fft(1:floor(length(input)/2+1));    % only take upperband
+        output_fft(1) = output_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
         stem(f,output_fft);                         % plot fft from 'output' data
         xlabel('f (Hz)');                           % set x-axis label
     end
