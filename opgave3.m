@@ -163,14 +163,16 @@ function update(handles)
     if get(handles.checkbox_input,'Value') == 0     % 0 means time and 1 means frequency
         plot(n,input);                              % plot 'input' data
         xlabel('n (sample)');                       % set x-axis label
+        ylabel('x[n]');                             % set y-axis label
     else
         input_fft = fft(input);                                 % calculate fft from the input data
         input_fft = abs(input_fft);                             % take the absolute value of the vector to eliminate phase
         input_fft = input_fft/fs;                               % devide by sampling frequency to get the right amplitudes
         input_fft = input_fft(1:floor(length(input)/2+1));      % only take upperband
         input_fft(1) = input_fft(1)/2;                          % correct DC component (doubled because of overlap of upper- and lowerband)
-        stem(f,input_fft);                          % plot fft from 'input' data
-        xlabel('f (Hz)');                           % set x-axis label
+        stem(f,input_fft);                                      % plot fft from 'input' data
+        xlabel('f (Hz)');                                       % set x-axis label
+        ylabel('|X[f]|');                                       % set y-axis label
     end
 
     % plot window function
@@ -178,14 +180,16 @@ function update(handles)
     if get(handles.checkbox_window,'Value') == 0    % 0 means time and 1 means frequency
         plot(n,window);                             % plot window function
         xlabel('n (sample)');                       % set x-axis label
+        ylabel('x[n]');                             % set y-axis label
     else
         window_fft = fft(window);                               % calculate fft from the window data
         window_fft = abs(window_fft);                           % take the absolute value of the vector to eliminate phase
         window_fft = window_fft/fs;                             % devide by sampling frequency to get the right amplitudes
         window_fft = window_fft(1:floor(length(input)/2+1));    % only take upperband
         window_fft(1) = window_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
-        stem(f,window_fft);                         % plot fft from window function
-        xlabel('f (Hz)');                           % set x-axis label
+        stem(f,window_fft);                                     % plot fft from window function
+        xlabel('f (Hz)');                                       % set x-axis label
+        ylabel('|X[f]|');                                       % set y-axis label
     end
 
     % plot output
@@ -193,14 +197,16 @@ function update(handles)
     if get(handles.checkbox_output,'Value') == 0    % 0 means time and 1 means frequency
         plot(n,real(output));                       % plot 'output' data
         xlabel('n (sample)');                       % set x-axis label
+        ylabel('x[n]');                             % set y-axis label
     else
         output_fft = fft(output);                               % calculate fft from the output data
         output_fft = abs(output_fft);                           % take the absolute value of the vector to eliminate phase
         output_fft = output_fft/fs;                             % devide by sampling frequency to get the right amplitudes
         output_fft = output_fft(1:floor(length(input)/2+1));    % only take upperband
         output_fft(1) = output_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
-        stem(f,output_fft);                         % plot fft from 'output' data
-        xlabel('f (Hz)');                           % set x-axis label
+        stem(f,output_fft);                                     % plot fft from 'output' data
+        xlabel('f (Hz)');                                       % set x-axis label
+        ylabel('|X[f]|');                                       % set y-axis label
     end
 end
 
