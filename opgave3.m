@@ -32,9 +32,13 @@ function opgave3_OpeningFcn(hObject, eventdata, handles, varargin)
     xls_in = xlsread('./data/defaultdata.xlsx','A12:G2011');        % read data to 'xls_in' for a maximum of 2000 values
     fs = xlsread('./data/defaultdata.xlsx','A9:A9');                % read sample frequency to 'fs'
     input = xls_in(:,1);                                            % select first column from 'xls_in'
-    menu_window_Callback(handles.menu_window, eventdata, handles);  % generate window function 
-    % UIWAIT makes opgave3 wait for user response (see UIRESUME)
-    % uiwait(handles.figure1);
+    menu_window_Callback(handles.menu_window, eventdata, handles);  % generate window function
+    % add UAntwerpen logo
+    axes(handles.axes_logo_uantwerpen);
+    logo_uantwerpen = imread('./images/uantwerpen.png');
+    image(logo_uantwerpen);
+    axis off;
+    axis image;
 end
 
 
