@@ -33,12 +33,12 @@ function opgave3_OpeningFcn(hObject, eventdata, handles, varargin)
     fs = xlsread('./data/defaultdata.xlsx','A9:A9');                % read sample frequency to 'fs'
     input = xls_in(:,1);                                            % select first column from 'xls_in'
     update(handles);                                                % run calculation on default data and plot
-    % add UAntwerpen logo
-    axes(handles.axes_logo_uantwerpen);
-    logo_uantwerpen = imread('./images/uantwerpen.png');
-    image(logo_uantwerpen);
-    axis off;
-    axis image;
+    % add uantwerpen logos
+    axes(handles.axes_logo_uantwerpen);                             % focus on 'axes_logo_uantwerpen'
+    logo_uantwerpen = imread('./images/uantwerpen.png');            % read image
+    image(logo_uantwerpen);                                         % display image on 'axes_logo_uantwerpen'
+    axis off;                                                       % turn off axis
+    axis image;                                                     % make 'axes_logo_uantwerpen' an image
 end
 
 
@@ -73,8 +73,8 @@ function update(handles)
     end
     set(handles.edit_column,'string',num2str(column));          % change value in textbox
     input = xls_in(:,column);                                   % select column from 'xls_in'
-    
-    
+
+
 
     % ------------------------------
     % x-axis values
