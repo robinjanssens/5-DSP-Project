@@ -167,34 +167,37 @@ function update(handles)
     output_fft = output_fft(1:floor(length(input)/2+1));    % only take upperband
     output_fft(1) = output_fft(1)/2;                        % correct DC component (doubled because of overlap of upper- and lowerband)
 
+    % ------------------------------
+    % Plotting
+    % ------------------------------
     % plot input
-    axes(handles.plot_input);
-    if get(handles.checkbox_input,'Value') == 0 % 0 means time and 1 means frequency
-        plot(n,input);
-        xlabel('n (sample)');
+    axes(handles.plot_input);                       % select input plot
+    if get(handles.checkbox_input,'Value') == 0     % 0 means time and 1 means frequency
+        plot(n,input);                              % plot 'input' data
+        xlabel('n (sample)');                       % set x-axis label
     else
-        stem(f,input_fft);
-        xlabel('f (Hz)');
+        stem(f,input_fft);                          % plot fft from 'input' data
+        xlabel('f (Hz)');                           % set x-axis label
     end
 
     % plot window function
-    axes(handles.plot_window);
-    if get(handles.checkbox_window,'Value') == 0 % 0 means time and 1 means frequency
-        plot(n,window);
-        xlabel('n (sample)');
+    axes(handles.plot_window);                      % select window function plot
+    if get(handles.checkbox_window,'Value') == 0    % 0 means time and 1 means frequency
+        plot(n,window);                             % plot window function
+        xlabel('n (sample)');                       % set x-axis label
     else
-        stem(f,window_fft);
-        xlabel('f (Hz)');
+        stem(f,window_fft);                         % plot fft from window function
+        xlabel('f (Hz)');                           % set x-axis label
     end
 
     % plot output
-    axes(handles.plot_output);
-    if get(handles.checkbox_output,'Value') == 0 % 0 means time and 1 means frequency
-        plot(n,real(output));
-        xlabel('n (sample)');
+    axes(handles.plot_output);                      % select output plot
+    if get(handles.checkbox_output,'Value') == 0    % 0 means time and 1 means frequency
+        plot(n,real(output));                       % plot 'output' data
+        xlabel('n (sample)');                       % set x-axis label
     else
-        stem(f,output_fft);
-        xlabel('f (Hz)');
+        stem(f,output_fft);                         % plot fft from 'output' data
+        xlabel('f (Hz)');                           % set x-axis label
     end
 end
 
