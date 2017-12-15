@@ -1,6 +1,6 @@
 # 5-DSP Project
 
-*By Robin Janssens and Jill Claes*
+*By Robin Janssens*
 
 ## Intro
 
