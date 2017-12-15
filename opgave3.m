@@ -32,7 +32,7 @@ function opgave3_OpeningFcn(hObject, eventdata, handles, varargin)
     xls_in = xlsread('./data/defaultdata.xlsx','A12:G2011');        % read data to 'xls_in' for a maximum of 2000 values
     fs = xlsread('./data/defaultdata.xlsx','A9:A9');                % read sample frequency to 'fs'
     input = xls_in(:,1);                                            % select first column from 'xls_in'
-    menu_window_Callback(handles.menu_window, eventdata, handles);  % generate window function
+    update(handles);                                                % run calculation on default data and plot
     % add UAntwerpen logo
     axes(handles.axes_logo_uantwerpen);
     logo_uantwerpen = imread('./images/uantwerpen.png');
@@ -56,7 +56,6 @@ function update(handles)
     global output;              % make 'output' variable accesable
     global fs;                  % make 'fs' variable accesable
     global selected_window;     % make 'selected_window' variable accesable
-    global window;              % make 'window' variable accesable
     global selected_filter;     % make 'selected_filter' variable accesable
     global span;                % make 'span' variable accesable
     global degree;              % make 'degree' variable accesable
@@ -74,6 +73,8 @@ function update(handles)
     end
     set(handles.edit_column,'string',num2str(column));          % change value in textbox
     input = xls_in(:,column);                                   % select column from 'xls_in'
+    
+    
 
     % ------------------------------
     % x-axis values
@@ -84,7 +85,19 @@ function update(handles)
     % ------------------------------
     % Window Function
     % ------------------------------
-
+    contents = cellstr(get(handles.menu_window,'String'));          % get menu content
+    selected_window = contents(get(handles.menu_window,'Value'));   % get menu value
+    if strcmp(selected_window,'No Window')
+        window = rectwin(length(input));
+    elseif strcmp(selected_window,'Bartlett')
+        window = bartlett(length(input));
+    elseif strcmp(selected_window,'Chebyshev')
+        window = chebwin(length(input));
+    elseif strcmp(selected_window,'Hamming')
+        window = hamming(length(input));
+    elseif strcmp(selected_window,'Hann')
+        window = hann(length(input));
+    end
 
 
     output = input .* window;       % calculate output using window function
@@ -247,22 +260,6 @@ end
 % menu_window
 % ------------------------------
 function menu_window_Callback(hObject, eventdata, handles)
-    global input;               % make 'input' varaible accesable
-    global selected_window;     % make 'selected_window' variable accesable
-    global window;              % make 'window' variable accesable
-    contents = cellstr(get(handles.menu_window,'String'));          % get menu content
-    selected_window = contents(get(handles.menu_window,'Value'));   % get menu value
-    if strcmp(selected_window,'No Window')
-        window = rectwin(length(input));
-    elseif strcmp(selected_window,'Bartlett')
-        window = bartlett(length(input));
-    elseif strcmp(selected_window,'Chebyshev')
-        window = chebwin(length(input));
-    elseif strcmp(selected_window,'Hamming')
-        window = hamming(length(input));
-    elseif strcmp(selected_window,'Hann')
-        window = hann(length(input));
-    end
     update(handles);
 end
 function menu_filter_Callback(hObject, eventdata, handles)
