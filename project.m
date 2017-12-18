@@ -1,10 +1,10 @@
-function varargout = opgave3(varargin)
+function varargout = project(varargin)
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename, ...
                        'gui_Singleton',  gui_Singleton, ...
-                       'gui_OpeningFcn', @opgave3_OpeningFcn, ...
-                       'gui_OutputFcn',  @opgave3_OutputFcn, ...
+                       'gui_OpeningFcn', @project_OpeningFcn, ...
+                       'gui_OutputFcn',  @project_OutputFcn, ...
                        'gui_LayoutFcn',  [], ...
                        'gui_Callback',   []);
     if nargin && ischar(varargin{1})
@@ -22,7 +22,7 @@ end
 % ------------------------------
 % Opening window
 % ------------------------------
-function opgave3_OpeningFcn(hObject, eventdata, handles, varargin)
+function project_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.output = hObject;   % varargin   unrecognized PropertyName/PropertyValue pairs from the
     guidata(hObject, handles);  % Update handles structure
     %clear;  % remove all existign variables and data
@@ -43,7 +43,7 @@ end
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = opgave3_OutputFcn(hObject, eventdata, handles)
+function varargout = project_OutputFcn(hObject, eventdata, handles)
     varargout{1} = handles.output;
 end
 

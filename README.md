@@ -2,10 +2,10 @@
 
 *By Robin Janssens*
 
-## Intro
+## Run Code
 
 ### CLI
-to run from CLI go to project folder and type `matlab -r projectDSP`
+to run from CLI go to project folder and type `matlab -r project`
 
 ### GUI
-In your file explorer right click on the .m file and press `Run`
+In your file explorer right click on the project.m file and press `Run`
