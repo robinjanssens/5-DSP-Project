@@ -116,20 +116,21 @@ function update(handles)
         % in 'Moving Average' mode and 'Savitzky-Golay' mode span needs to be bigger than 1 and an odd number
         if mod(span,2) == 0                                       % if span is not odd
             span = span-1;                                        % make it odd
-            set(handles.edit_span,'string',num2str(span));        % change value in textbox
         end
         if span < 1                                               % if span is smaller than 1
             span = 1;                                             % make it 1
-            set(handles.edit_span,'string',num2str(span));        % change value in textbox
         end
     elseif strcmp(selected_filter,'Local Regression (1th degree)') || strcmp(selected_filter,'Local Regression (2de degree)') || strcmp(selected_filter,'Robust Local Regression (1th degree)') || strcmp(selected_filter,'Robust Local Regression (2de degree)')
-        % in regression modes span needs to be a percentage between 0 and 99
-        if span > 99                                              % if span is bigger than 99
-            span = 99;                                            % make it 99
-            set(handles.edit_span,'string',num2str(span));        % change value in textbox
+        % in regression modes span needs to be a percentage between 1 and 99
+        if span < 1                                             % if span is smaller than 1 percent
+            span = 1;                                           % make it 1 percent
+        end
+        if span > 99                                            % if span is bigger than 99 percent
+            span = 99;                                          % make it 99 percent
         end
     end
-
+    set(handles.edit_span,'string',num2str(span));      % change value in textbox
+    
     degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
     degree = uint32(degree);                                % make it unsigned integer to remove negative numbers and decimal numbers
     set(handles.edit_degree,'string',num2str(degree));      % change value in textbox
