@@ -345,7 +345,7 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
-    elseif strcmp(selected_filter,'High-Pass Filter')
+    elseif strcmp(selected_filter,'Low-Pass Filter') || strcmp(selected_filter,'High-Pass Filter')
         set(handles.text_span,'visible','off');
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
