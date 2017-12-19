@@ -278,6 +278,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','off');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','off');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     elseif strcmp(selected_filter,'Moving Average')
@@ -285,6 +287,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','on');
         set(handles.text_percent,'visible','off');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     elseif strcmp(selected_filter,'Local Regression (1th degree)')
@@ -292,6 +296,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     elseif strcmp(selected_filter,'Local Regression (2de degree)')
@@ -299,6 +305,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     elseif strcmp(selected_filter,'Savitzky-Golay Filter')
@@ -306,6 +314,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','on');
         set(handles.text_percent,'visible','off');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','on');
         set(handles.edit_degree,'visible','on');
     elseif strcmp(selected_filter,'Robust Local Regression (1th degree)')
@@ -313,6 +323,8 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     elseif strcmp(selected_filter,'Robust Local Regression (2de degree)')
@@ -320,6 +332,17 @@ function menu_filter_Callback(hObject, eventdata, handles)
         set(handles.edit_span,'visible','on');
         set(handles.text_samples,'visible','off');
         set(handles.text_percent,'visible','on');
+        set(handles.text_cutoff,'visible','off');
+        set(handles.text_hz,'visible','off');
+        set(handles.text_degree,'visible','off');
+        set(handles.edit_degree,'visible','off');
+    elseif strcmp(selected_filter,'High-Pass Filter')
+        set(handles.text_span,'visible','off');
+        set(handles.edit_span,'visible','on');
+        set(handles.text_samples,'visible','off');
+        set(handles.text_percent,'visible','off');
+        set(handles.text_cutoff,'visible','on');
+        set(handles.text_hz,'visible','on');
         set(handles.text_degree,'visible','off');
         set(handles.edit_degree,'visible','off');
     end
