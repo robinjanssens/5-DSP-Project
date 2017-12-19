@@ -129,6 +129,7 @@ function update(handles)
             span = 99;                                          % make it 99 percent
         end
     end
+    cutoff_frequency = span;
     set(handles.edit_span,'string',num2str(span));      % change value in textbox
     
     degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
@@ -138,21 +139,29 @@ function update(handles)
         degree = span-1;                                    % make it span-1
         set(handles.edit_degree,'string',num2str(degree));  % change value in textbox
     end
+    
 
-    if strcmp(selected_filter,'No Filter')                                    % if no filter is selected
+    if strcmp(selected_filter,'No Filter')                                  % if no filter is selected
         % output = output (do nothing)
-    elseif strcmp(selected_filter,'Moving Average')                           % if filter 'Moving Average' is selected
-        output = smooth(output,double(span),'moving');                  % perform smooth() on output (span in samples)
-    elseif strcmp(selected_filter,'Local Regression (1th degree)')            % if filter 'Local Regression (1th degree)' is selected
-        output = smooth(output,double(span)/100,'lowess');              % perform smooth() on output (span in percentage)
-    elseif strcmp(selected_filter,'Local Regression (2de degree)')            % if filter 'Local Regression (2de degree)' is selected
-        output = smooth(output,double(span)/100,'loess');               % perform smooth() on output (span in percentage)
-    elseif strcmp(selected_filter,'Savitzky-Golay Filter')                    % if filter Savitzky-Golay Filter' is selected
-        output = smooth(output,double(span),'sgolay',double(degree));   % perform smooth() on output (span in samples)
-    elseif strcmp(selected_filter,'Robust Local Regression (1th degree)')     % if filter 'Robust Local Regression (1th degree)' is selected
-        output = smooth(output,double(span)/100,'rlowess');             % perform smooth() on output (span in percentage)
-    elseif strcmp(selected_filter,'Robust Local Regression (2de degree)')     % if filter 'Robust Local Regression (2de degree)' is selected
-        output = smooth(output,double(span)/100,'rloess');              % perform smooth() on output (span in percentage)
+    elseif strcmp(selected_filter,'Moving Average')                         % if filter 'Moving Average' is selected
+        output = smooth(output,double(span),'moving');                      % perform smooth() on output (span in samples)
+    elseif strcmp(selected_filter,'Local Regression (1th degree)')          % if filter 'Local Regression (1th degree)' is selected
+        output = smooth(output,double(span)/100,'lowess');                  % perform smooth() on output (span in percentage)
+    elseif strcmp(selected_filter,'Local Regression (2de degree)')          % if filter 'Local Regression (2de degree)' is selected
+        output = smooth(output,double(span)/100,'loess');                   % perform smooth() on output (span in percentage)
+    elseif strcmp(selected_filter,'Savitzky-Golay Filter')                  % if filter Savitzky-Golay Filter' is selected
+        output = smooth(output,double(span),'sgolay',double(degree));       % perform smooth() on output (span in samples)
+    elseif strcmp(selected_filter,'Robust Local Regression (1th degree)')   % if filter 'Robust Local Regression (1th degree)' is selected
+        output = smooth(output,double(span)/100,'rlowess');                 % perform smooth() on output (span in percentage)
+    elseif strcmp(selected_filter,'Robust Local Regression (2de degree)')   % if filter 'Robust Local Regression (2de degree)' is selected
+        output = smooth(output,double(span)/100,'rloess');                  % perform smooth() on output (span in percentage)
+    elseif strcmp(selected_filter,'High-Pass Filter')                       % if filter 'High-Pass Filter' is selected
+         output_fft = fft(output);                                          % calculate fft
+         output_fft = fftshift(output_fft);
+         f_filter = (-fs/2:fs/length(output):fs/2-fs/length(output))';
+         filter_function = abs(f_filter) > cutoff_frequency;
+         output_fft = output_fft.*filter_function;
+         output = ifft(ifftshift(output_fft));                                         % calculate reverse fft
     end
 
 
