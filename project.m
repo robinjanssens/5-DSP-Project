@@ -63,7 +63,7 @@ function update(handles)
     % ------------------------------
     % Select Column
     % ------------------------------
-    column = str2double(get(handles.edit_column, 'String'));	  % read column textbox
+    column = str2double(get(handles.edit_column, 'String'));    % read column textbox
     column = uint32(column);                                    % make it unsigned integer to remove negative numbers and decimal numbers
     columns = size(xls_in,2);                                   % get the amount of columns in 'xls_in'
     if column < 1                                               % if selected column is smaller than first existing column
@@ -73,7 +73,6 @@ function update(handles)
     end
     set(handles.edit_column,'string',num2str(column));          % change value in textbox
     input = xls_in(:,column);                                   % select column from 'xls_in'
-
 
 
     % ------------------------------
@@ -259,7 +258,11 @@ function button_save_Callback(hObject, eventdata, handles)
         status = [status xlswrite(filename,{'Filter'},'Blad1','B7')];           % try to write 'Filter' to xls file and write status response to status vector
         status = [status xlswrite(filename,selected_filter,'Blad1','C7')];      % try to write selected_filter to xls file and write status response to status vector
         if not(strcmp(selected_filter,'No Filter'))                             % unless 'No Filter' is selected
-            status = [status xlswrite(filename,{'Span'},'Blad1','D7')];         % try to write 'Span' to xls file and write status response to status vector
+            if strcmp(selected_filter,'Low-Pass Filter') || strcmp(selected_filter,'High-Pass Filter')	% if filter 'Low-Pass Filter' or 'High-Pass Filter' is selected
+                status = [status xlswrite(filename,{'Cutoff Frequency'},'Blad1','D7')];     % try to write 'Cutoff Frequency' to xls file and write status response to status vector 
+            else                                                                            % else (all other filters)
+                status = [status xlswrite(filename,{'Span'},'Blad1','D7')];                 % try to write 'Span' to xls file and write status response to status vector
+            end
             status = [status xlswrite(filename,span,'Blad1','E7')];             % try to write span value to xls file and write status response to status vector
             if strcmp(selected_filter,'Savitzky-Golay Filter')                  % if 'Savitzky-Golay Filter' is selected
                 status = [status xlswrite(filename,{'Degree'},'Blad1','F7')];   % try to write 'Degree' to xls file and write status response to status vector
