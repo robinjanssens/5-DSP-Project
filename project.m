@@ -106,31 +106,35 @@ function update(handles)
     % ------------------------------
     % Filter
     % ------------------------------
-    span = str2double(get(handles.edit_span,'String'));           % read span textbox
-    span = uint32(span);                                          % make it unsigned integer to remove negative numbers and decimal numbers
-    set(handles.edit_span,'string',num2str(span));                % change value in textbox
+    span = str2double(get(handles.edit_span,'String'));             % read span textbox
+    
+    %set(handles.edit_span,'string',num2str(span));                 % change value in textbox
 
-    contents = cellstr(get(handles.menu_filter,'String'));        % get popchoice content
-    selected_filter = contents(get(handles.menu_filter,'Value')); % get popchoice value
+    contents = cellstr(get(handles.menu_filter,'String'));          % get popchoice content
+    selected_filter = contents(get(handles.menu_filter,'Value'));   % get popchoice value
     if strcmp(selected_filter,'Moving Average') || strcmp(selected_filter,'Savitzky-Golay Filter')
         % in 'Moving Average' mode and 'Savitzky-Golay' mode span needs to be bigger than 1 and an odd number
-        if mod(span,2) == 0                                       % if span is not odd
-            span = span-1;                                        % make it odd
+        span = uint32(span);                                        % make it unsigned integer to remove negative numbers and decimal numbers
+        if mod(span,2) == 0                                         % if span is not odd
+            span = span-1;                                          % make it odd
         end
-        if span < 1                                               % if span is smaller than 1
-            span = 1;                                             % make it 1
+        if span < 1                                                 % if span is smaller than 1
+            span = 1;                                               % make it 1
         end
     elseif strcmp(selected_filter,'Local Regression (1th degree)') || strcmp(selected_filter,'Local Regression (2de degree)') || strcmp(selected_filter,'Robust Local Regression (1th degree)') || strcmp(selected_filter,'Robust Local Regression (2de degree)')
         % in regression modes span needs to be a percentage between 1 and 99
-        if span < 1                                             % if span is smaller than 1 percent
-            span = 1;                                           % make it 1 percent
+        span = uint32(span);                                        % make it unsigned integer to remove negative numbers and decimal numbers
+        if span < 1                                                 % if span is smaller than 1 percent
+            span = 1;                                               % make it 1 percent
         end
-        if span > 99                                            % if span is bigger than 99 percent
-            span = 99;                                          % make it 99 percent
+        if span > 99                                                % if span is bigger than 99 percent
+            span = 99;                                              % make it 99 percent
         end
+    elseif strcmp(selected_filter,'Low-Pass Filter') || strcmp(selected_filter,'High-Pass Filter')	% if filter 'Low-Pass Filter' or 'High-Pass Filter' is selected
+        span = abs(span);                                           % make negative frequenties positieve
     end
-    cutoff_frequency = span;
-    set(handles.edit_span,'string',num2str(span));      % change value in textbox
+    set(handles.edit_span,'string',num2str(span));                  % change value in textbox
+    cutoff_frequency = span;                                        % cutoff_frequency from span textbox (rename variable to make the code more readable)
     
     degree = str2double(get(handles.edit_degree,'String')); % read degree textbox
     degree = uint32(degree);                                % make it unsigned integer to remove negative numbers and decimal numbers
