@@ -155,20 +155,16 @@ function update(handles)
         output = smooth(output,double(span)/100,'rlowess');                 % perform smooth() on output (span in percentage)
     elseif strcmp(selected_filter,'Robust Local Regression (2de degree)')   % if filter 'Robust Local Regression (2de degree)' is selected
         output = smooth(output,double(span)/100,'rloess');                  % perform smooth() on output (span in percentage)
-    elseif strcmp(selected_filter,'Low-Pass Filter')                        % if filter 'Low-Pass Filter' is selected
-         output_fft = fft(output);                                          % calculate fft
-         output_fft = fftshift(output_fft);
-         f_filter = (-fs/2:fs/length(output):fs/2-fs/length(output))';
-         filter_function = abs(f_filter) <= cutoff_frequency;
-         output_fft = output_fft.*filter_function;
-         output = ifft(ifftshift(output_fft));                              % calculate reverse fft
-     elseif strcmp(selected_filter,'High-Pass Filter')                      % if filter 'High-Pass Filter' is selected
-         output_fft = fft(output);                                          % calculate fft
-         output_fft = fftshift(output_fft);
-         f_filter = (-fs/2:fs/length(output):fs/2-fs/length(output))';
-         filter_function = abs(f_filter) > cutoff_frequency;
-         output_fft = output_fft.*filter_function;
-         output = ifft(ifftshift(output_fft));                              % calculate reverse fft
+    elseif strcmp(selected_filter,'Low-Pass Filter') || strcmp(selected_filter,'High-Pass Filter')	% if filter 'Low-Pass Filter' or 'High-Pass Filter' is selected
+        output_fft = fftshift(fft(output));                                 % calculate fft
+        f_filter = (-fs/2:fs/length(output):fs/2-fs/length(output))';       % calculate matching frequency values
+        if strcmp(selected_filter,'Low-Pass Filter')                        % if filter 'Low-Pass Filter' is selected
+             filter_function = abs(f_filter) <= cutoff_frequency;           % generate filter function
+        else                                                                % else (if filter 'High-Pass Filter' is selected)
+             filter_function = abs(f_filter) > cutoff_frequency;            % generate filter function
+        end
+        output_fft = output_fft.*filter_function;                           % apply filter to output_fft
+        output = ifft(ifftshift(output_fft));                               % calculate inverse fft
     end
 
 
