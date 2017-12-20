@@ -107,9 +107,6 @@ function update(handles)
     % Filter
     % ------------------------------
     span = str2double(get(handles.edit_span,'String'));             % read span textbox
-    
-    %set(handles.edit_span,'string',num2str(span));                 % change value in textbox
-
     contents = cellstr(get(handles.menu_filter,'String'));          % get popchoice content
     selected_filter = contents(get(handles.menu_filter,'Value'));   % get popchoice value
     if strcmp(selected_filter,'Moving Average') || strcmp(selected_filter,'Savitzky-Golay Filter')
